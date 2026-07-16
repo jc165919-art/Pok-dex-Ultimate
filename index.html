@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Ultimate</title>
+    <meta name="description" content="Pokédex Ultimate - Guia completo Pokémon">
+    <meta name="keywords" content="pokemon,pokédex,pikachu,charizard,pokeapi">
+    <meta name="author" content="João Carlos">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="pin.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+    <!-- Fundo ambiente animado (Canvas 2D) — fica atrás de todo o conteúdo -->
+    <canvas id="gradientCanvas" aria-hidden="true"></canvas>
+
+    <!-- Overlay de carregamento inicial -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <p id="loadingText">Carregando Pokédex...</p>
+    </div>
+
+    <!-- Container de notificações (toast) -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!--cabecalho -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="#home" class="logo-link">
+                  
+                </a>
+                <p>Seu guia completo Pokémon</p>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#pokedex">Pokédex</a></li>
+                    <li><a href="#favorites">Favoritos</a></li>
+                    <li><a href="#compare">Comparador</a></li>
+                    <li><a href="#profile">Perfil</a></li>
+                    <li><a href="#footer">Configurações</a></li>
+                </ul>
+            </nav>
+            <div class="header-buttons">
+                <button type="button" id="randomButton" title="Atalho: R">
+                    <span class="dice">🎲</span> Aleatório
+                </button>
+                <button type="button" id="themeButton">Modo Claro</button>
+
+                <!-- Botão de login local -->
+                <div class="login-group">
+                    <button type="button" id="loginButton" class="login-btn">Entrar</button>
+                </div>
+
+                <!-- Estado "logado": chip com foto, nome e opção de sair -->
+                <div class="profile-chip" id="profileChip" hidden>
+                    <img id="profileChipAvatar" src="" alt="Foto do perfil">
+                    <span id="profileChipName"></span>
+                    <button type="button" id="logoutButton" aria-label="Sair da conta">Sair</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!--hero-->
+    <section class="hero" id="home">
+        <div class="container">
+            <span class="hero-eyebrow">SCANNER DE POKÉDEX ATIVO</span>
+            <h2>Encontre qualquer Pokémon</h2>
+            <p>Pesquise por nome, número, tipo, geração e muito mais.</p>
+            <div class="scanner-frame">
+                <span class="scanner-corner tl"></span>
+                <span class="scanner-corner tr"></span>
+                <span class="scanner-corner bl"></span>
+                <span class="scanner-corner br"></span>
+                <span class="scanner-line" aria-hidden="true"></span>
+                <div class="search-box">
+                    <label for="searchPokemon" class="visually-hidden">Buscar Pokémon por nome ou número</label>
+                    <input
+                        type="search"
+                        id="searchPokemon"
+                        placeholder="Digite o nome ou número do Pokémon ..."
+                        autocomplete="off"
+                    >
+                    <div class="autocomplete-list" id="autocompleteList"></div>
+                    <button type="button" id="searchButton">Buscar</button>
+                </div>
+            </div>
+            <p class="search-hint"><kbd>/</kbd> busca &nbsp;·&nbsp; <kbd>R</kbd> Pokémon aleatório &nbsp;·&nbsp; <kbd>Esc</kbd> fecha detalhes</p>
+        </div>
+    </section>
+
+    <!--perfil-->
+    <section class="profile" id="profile">
+        <div class="container profile-container">
+            <div class="profile-image">
+                <img src="istockphoto-1495088043-612x612.png" alt="Avatar do usuário" id="profileAvatar">
+            </div>
+            <div class="profile-info">
+                <span class="section-eyebrow">FICHA DE TREINADOR</span>
+                <h2 id="profileName">Treinador Pokémon</h2>
+                <p id="profileLevel">Nível 1</p>
+                <button type="button" id="editProfileButton">Editar Perfil</button>
+            </div>
+        </div>
+    </section>
+
+    <!--dashboard-->
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <svg class="dashboard-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a9 9 0 0 1 0 18 9 9 0 0 1 0-18Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/></svg>
+                    <h3>Total de Pokémon</h3>
+                    <p id="totalPokemon">1025</p>
+                </div>
+                <div class="dashboard-card">
+                    <svg class="dashboard-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20.4 4.6 13a5 5 0 0 1 7-7.1l.4.4.4-.4a5 5 0 0 1 7 7.1L12 20.4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                    <h3>Favoritos</h3>
+                    <p id="favoriteCount">0</p>
+                </div>
+                <div class="dashboard-card">
+                    <svg class="dashboard-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M3 16l9 5 9-5M3 12l9 5 9-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                    <h3>Tipos</h3>
+                    <p id="totalTypes">18</p>
+                </div>
+                <div class="dashboard-card">
+                    <svg class="dashboard-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="4.5" rx="1.4" stroke="currentColor" stroke-width="2"/><rect x="3" y="10.75" width="18" height="4.5" rx="1.4" stroke="currentColor" stroke-width="2"/><rect x="3" y="17.5" width="18" height="4.5" rx="1.4" stroke="currentColor" stroke-width="2"/></svg>
+                    <h3>Gerações</h3>
+                    <p id="totalGenerations">9</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Filtros-->
+    <section class="filters">
+        <div class="container">
+            <span class="section-eyebrow">REFINAR BUSCA</span>
+            <h2>Filtros Avançados</h2>
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label for="type">Tipo</label>
+                    <select id="type">
+                        <option value="">Todos</option>
+                        <option value="normal">Normal</option>
+                        <option value="fire">Fogo</option>
+                        <option value="water">Água</option>
+                        <option value="grass">Planta</option>
+                        <option value="electric">Elétrico</option>
+                        <option value="ice">Gelo</option>
+                        <option value="fighting">Lutador</option>
+                        <option value="poison">Venenoso</option>
+                        <option value="ground">Terra</option>
+                        <option value="flying">Voador</option>
+                        <option value="psychic">Psíquico</option>
+                        <option value="bug">Inseto</option>
+                        <option value="rock">Pedra</option>
+                        <option value="ghost">Fantasma</option>
+                        <option value="dragon">Dragão</option>
+                        <option value="dark">Sombrio</option>
+                        <option value="steel">Aço</option>
+                        <option value="fairy">Fada</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="generation">Geração</label>
+                    <select id="generation">
+                        <option value="">Todas</option>
+                        <option value="kanto">Kanto</option>
+                        <option value="johto">Johto</option>
+                        <option value="hoenn">Hoenn</option>
+                        <option value="sinnoh">Sinnoh</option>
+                        <option value="unova">Unova</option>
+                        <option value="kalos">Kalos</option>
+                        <option value="alola">Alola</option>
+                        <option value="galar">Galar</option>
+                        <option value="paldea">Paldea</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="rarity">Raridade</label>
+                    <select id="rarity">
+                        <option value="">Todas</option>
+                        <option value="comum">Comum</option>
+                        <option value="incomum">Incomum</option>
+                        <option value="raro">Raro</option>
+                        <option value="lendario">Lendário</option>
+                        <option value="mitico">Mítico</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="order">Ordenar</label>
+                    <select id="order">
+                        <option value="number">Número</option>
+                        <option value="name">Nome</option>
+                        <option value="attack">Ataque</option>
+                        <option value="defense">Defesa</option>
+                        <option value="speed">Velocidade</option>
+                        <option value="hp">HP</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button type="button" id="filterReset" class="filter-reset">Limpar filtros</button>
+            </div>
+        </div>
+    </section>
+
+    <!--Lista de Pokémon-->
+    <main id="pokedex">
+        <div class="container">
+            <section class="pokemon-grid" id="pokemonGrid" aria-live="polite"></section>
+            <p class="empty-state" id="emptyState" hidden>Nenhum Pokémon encontrado com esses filtros.</p>
+
+            <!--Paginação-->
+            <nav class="pagination" id="pagination" aria-label="Paginação da Pokédex"></nav>
+        </div>
+    </main>
+
+    <!--Comparador de Pokémon-->
+    <section class="compare-section" id="compare">
+        <div class="container">
+            <span class="section-eyebrow">MODO VS.</span>
+            <h2>Comparar Pokémon</h2>
+            <p>Escolha dois Pokémon para comparar seus atributos.</p>
+            <div class="compare-container">
+                <div class="compare-box">
+                    <label for="pokemonOne" class="visually-hidden">Primeiro Pokémon</label>
+                    <input type="text" id="pokemonOne" placeholder="Primeiro Pokémon (nome ou número)">
+                </div>
+                <div class="compare-box">
+                    <label for="pokemonTwo" class="visually-hidden">Segundo Pokémon</label>
+                    <input type="text" id="pokemonTwo" placeholder="Segundo Pokémon (nome ou número)">
+                </div>
+                <button type="button" id="compareButton">Comparar</button>
+            </div>
+            <div class="compare-result" id="compareResult" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <!--Favoritos-->
+    <section class="favorites-section" id="favorites">
+        <div class="container">
+            <div class="section-title">
+                <span class="section-eyebrow">SUA COLEÇÃO</span>
+                <h2>Pokémon Favoritos</h2>
+                <p>Seus Pokémon favoritos aparecerão aqui.</p>
+            </div>
+            <div class="favorites-grid" id="favoritesGrid"></div>
+            <p class="empty-state" id="favoritesEmpty">Você ainda não tem favoritos. Clique em "Favoritar" em qualquer Pokémon.</p>
+        </div>
+    </section>
+
+    <!--Ranking-->
+    <section class="ranking-section">
+        <div class="container">
+            <div class="section-title">
+                <span class="section-eyebrow">RECORDES DA POKÉDEX</span>
+                <h2>Ranking Pokémon</h2>
+                <p id="rankingSubtitle">Veja os destaques da Pokédex.</p>
+            </div>
+            <div class="ranking-grid">
+                <div class="ranking-card" id="rankAttack">
+                    <h3>Maior Ataque</h3>
+                    <p>---</p>
+                </div>
+                <div class="ranking-card" id="rankDefense">
+                    <h3>Maior Defesa</h3>
+                    <p>---</p>
+                </div>
+                <div class="ranking-card" id="rankSpeed">
+                    <h3>Maior Velocidade</h3>
+                    <p>---</p>
+                </div>
+                <div class="ranking-card" id="rankHp">
+                    <h3>Maior HP</h3>
+                    <p>---</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Rodapé-->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-logo">
+        
+                <p>Seu guia completo Pokémon.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Navegação</h3>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#pokedex">Pokédex</a></li>
+                    <li><a href="#favorites">Favoritos</a></li>
+                    <li><a href="#profile">Perfil</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <a href="https://github.com/jc165919-arte" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/joao-carlos/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://instagram.com/joao_carlos_alves7" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2026 Pokédex Ultimate.</p>
+                <p>Desenvolvido por João Carlos</p>
+                <p class="footer-api-credit">Dados fornecidos por <a href="https://pokeapi.co" target="_blank" rel="noopener noreferrer">PokéAPI</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de login local -->
+    <div class="modal-overlay" id="loginModal" hidden>
+        <div class="modal-box config-modal-box" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+            <button type="button" class="modal-close" id="loginModalClose" aria-label="Fechar">&times;</button>
+            <span class="section-eyebrow">CONTA</span>
+            <h3 id="loginModalTitle">Entrar na Pokédex</h3>
+            <p class="config-desc">
+                Use seu e-mail e senha para entrar. Seus favoritos e perfil serão salvos na sua conta.
+            </p>
+            <label for="loginEmail" class="visually-hidden">E-mail</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="username">
+            <label for="loginPassword" class="visually-hidden">Senha</label>
+            <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password">
+            <div class="config-actions">
+                <button type="button" id="loginCreateButton" class="filter-reset">Criar conta</button>
+                <button type="button" id="loginSubmitButton" class="config-save">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalhes -->
+    <div class="modal-overlay" id="detailModal" hidden>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button type="button" class="modal-close" id="modalClose" aria-label="Fechar">&times;</button>
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="js/gradient-bg.js"></script>
+    <script src="js/header-scroll.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>

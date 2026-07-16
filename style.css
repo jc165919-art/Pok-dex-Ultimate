@@ -1,0 +1,2172 @@
+/* ===================================
+   RESET & BASE
+=================================== */
+*,*::before,*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+/* -----------------------------------------------------------
+   SISTEMA DE COR — "Pokédex OS" v2
+   Referência direta ao objeto real: a carcaça de plástico vermelho
+   fosco de um Pokédex, o visor de LCD cor de papel/creme e o brilho
+   fósforo verde de um leitor de dados antigo. Nada de "vermelho neon
+   sobre preto genérico" — as cores vêm do dispositivo, não de um tema
+   de dashboard. Modo escuro = chassi na sombra. Modo claro = a tampa
+   do visor sob luz de estúdio.
+   ----------------------------------------------------------- */
+:root{
+    --primary:#e2402f;
+    --primary-strong:#96201a;
+    --primary-soft:rgba(226,64,47,.16);
+    --secondary:#f2b025;
+    --secondary-strong:#c98a00;
+    --accent-teal:#39d9a4;
+    --accent-violet:#8b7bff;
+
+    --surface:#0c0f14;
+    --surface-soft:#151a22;
+    --surface-light:#1e2530;
+    --surface-raised:#272f3d;
+
+    --background:radial-gradient(circle at 14% -8%, rgba(226,64,47,.18) 0%, transparent 40%),
+                 radial-gradient(circle at 102% 6%, rgba(57,217,164,.11) 0%, transparent 40%),
+                 radial-gradient(circle at 50% 120%, rgba(242,176,37,.06) 0%, transparent 45%),
+                 linear-gradient(180deg, #090b0f 0%, #10141b 45%, #0b0d12 100%);
+
+    --text:#f3efe4;
+    --text-muted:#98a0ab;
+    --border:#2c3543;
+    --border-soft:rgba(255,255,255,.10);
+
+    --success:#39d9a4;
+    --warning:#f2b025;
+    --danger:#ff5c57;
+
+    --radius:28px;
+    --shadow:0 20px 48px rgba(0,0,0,.5);
+    --shadow-soft:0 12px 28px rgba(0,0,0,.34);
+    --glow-signal:0 0 0 3px rgba(57,217,164,.22);
+
+    --pokeball-bottom:#0c0f14;
+    --pokeball-border:#0c0f14;
+    --center-dot:#dedede;
+
+    --t-normal:#b8b8d1;
+    --t-fire:#ff5e40;
+    --t-water:#5ba3ff;
+    --t-grass:#62d85f;
+    --t-electric:#ffd700;
+    --t-ice:#4dd0ff;
+    --t-fighting:#ff6b42;
+    --t-poison:#c870ff;
+    --t-ground:#ffb347;
+    --t-flying:#b0d0ff;
+    --t-psychic:#ff69d0;
+    --t-bug:#b5d85f;
+    --t-rock:#c9b15f;
+    --t-ghost:#8070ff;
+    --t-dragon:#7c61ff;
+    --t-dark:#8b7355;
+    --t-steel:#a8c4d9;
+    --t-fairy:#ffb0d9;
+
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono:'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Modo claro: a tampa creme do visor sob luz de estúdio, não um "branco de SaaS" */
+body.theme-light{
+    --primary:#c73325;
+    --primary-strong:#87201a;
+    --primary-soft:rgba(199,51,37,.10);
+    --secondary:#d98a06;
+    --secondary-strong:#a86c00;
+    --accent-teal:#10916d;
+    --accent-violet:#6a58e0;
+
+    --surface:#f5efdf;
+    --surface-soft:#fffbf2;
+    --surface-light:#fbecd3;
+    --surface-raised:#ffffff;
+
+    --background:radial-gradient(circle at 10% -5%, rgba(199,51,37,.08) 0%, transparent 42%),
+                 radial-gradient(circle at 100% 8%, rgba(16,145,109,.09) 0%, transparent 38%),
+                 radial-gradient(circle at 50% 120%, rgba(217,138,6,.06) 0%, transparent 45%),
+                 linear-gradient(180deg, #fffbf2 0%, #fdf3e2 55%, #faeacf 100%);
+
+    --text:#211a13;
+    --text-muted:#75695a;
+    --border:#e3d3b6;
+    --border-soft:rgba(33,26,19,.12);
+
+    --shadow:0 20px 44px rgba(60,40,20,.14);
+    --shadow-soft:0 10px 22px rgba(60,40,20,.10);
+    --glow-signal:0 0 0 3px rgba(16,145,109,.18);
+
+    --pokeball-bottom:#f5efdf;
+    --pokeball-border:#f5efdf;
+    --center-dot:#8a8378;
+}
+
+body{
+    font-family: var(--font-body);
+    min-height:100vh;
+    color:var(--text);
+    background:var(--background);
+    background-attachment:fixed;
+    transition:background .35s ease, color .35s ease;
+}
+
+body, button, input, select{
+    color:inherit;
+}
+
+h1, h2, h3{
+    font-family:var(--font-display);
+    font-weight:700;
+    letter-spacing:.01em;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+ul{
+    list-style:none;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+    font:inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible{
+    outline:2px solid var(--accent-teal);
+    outline-offset:3px;
+}
+
+input, select{
+    outline:none;
+    font:inherit;
+}
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+.container{
+    width:min(1180px, calc(100% - 40px));
+    margin-inline:auto;
+}
+
+section{
+    margin-top:60px;
+}
+
+.visually-hidden{
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+}
+
+/* ===================================
+   FUNDO AMBIENTE — radar de scanner + grade hexagonal + Poké Balls
+=================================== */
+#gradientCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+    opacity:.9;
+    pointer-events:none;
+}
+
+body.theme-light #gradientCanvas{
+    opacity:.55;
+}
+
+/* Assinatura visual do site: uma trama fina de scanlines horizontais,
+   como o visor de um dispositivo de campo antigo. Fica por cima de todo
+   o fundo, para dar a sensação de "ler dados numa tela". */
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:repeating-linear-gradient(180deg,
+        rgba(255,255,255,.07) 0px,
+        rgba(255,255,255,.07) 1px,
+        transparent 1px,
+        transparent 3px);
+    mix-blend-mode:overlay;
+    opacity:.6;
+}
+
+body.theme-light::before{
+    background:repeating-linear-gradient(180deg,
+        rgba(33,26,19,.045) 0px,
+        rgba(33,26,19,.045) 1px,
+        transparent 1px,
+        transparent 3px);
+    opacity:.4;
+}
+
+/* ===================================
+   LOADING OVERLAY
+=================================== */
+.loading-overlay{
+    position:fixed;
+    inset:0;
+    z-index:999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    background:var(--surface);
+    color:var(--text);
+    transition:opacity .4s ease, visibility .4s ease;
+}
+
+.loading-overlay[hidden]{
+    display:none;
+}
+
+.loading-overlay.fade-out{
+    opacity:0;
+    pointer-events:none;
+}
+
+.loader{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    position:relative;
+    background:
+        linear-gradient(#fff, #fff) center/100% 16px no-repeat,
+        linear-gradient(var(--primary), var(--primary)) top/100% 50% no-repeat,
+        linear-gradient(var(--pokeball-bottom), var(--pokeball-bottom)) bottom/100% 50% no-repeat;
+    border:4px solid var(--pokeball-border);
+    box-shadow:0 8px 24px rgba(0,0,0,.3);
+    animation:pokeballSpin 1s cubic-bezier(.6,0,.4,1) infinite;
+}
+
+.loader::before{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#fff;
+    border:4px solid var(--pokeball-border);
+    transform:translate(-50%,-50%);
+}
+
+.loader::after{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--center-dot);
+    transform:translate(-50%,-50%);
+}
+
+.loader.small{
+    width:34px;
+    height:34px;
+    background:
+        linear-gradient(#fff, #fff) center/100% 12px no-repeat,
+        linear-gradient(var(--primary), var(--primary)) top/100% 50% no-repeat,
+        linear-gradient(var(--pokeball-bottom), var(--pokeball-bottom)) bottom/100% 50% no-repeat;
+    border-width:3px;
+}
+
+.loader.small::before{
+    width:11px;
+    height:11px;
+    border-width:2px;
+}
+
+.loader.small::after{
+    width:4px;
+    height:4px;
+}
+
+@keyframes pokeballSpin{
+    0%{ transform:rotate(0deg); }
+    50%{ transform:rotate(180deg); }
+    100%{ transform:rotate(360deg); }
+}
+
+.pokeball-icon{
+    display:inline-block;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    flex-shrink:0;
+    background:
+        linear-gradient(#fff, #fff) center/100% 15px no-repeat,
+        linear-gradient(var(--primary), var(--primary)) top/100% 50% no-repeat,
+        linear-gradient(var(--pokeball-bottom), var(--pokeball-bottom)) bottom/100% 50% no-repeat;
+    border:3px solid var(--pokeball-border);
+    position:relative;
+}
+
+.pokeball-icon::before{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--pokeball-border);
+    transform:translate(-50%,-50%);
+}
+
+.site-logo{
+    display:block;
+    height:48px;
+    width:48px;
+    object-fit:cover;
+    border-radius:14px;
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow-soft);
+}
+
+.footer-logo-image{
+    display:block;
+    height:44px;
+    width:44px;
+    object-fit:cover;
+    border-radius:12px;
+    border:1px solid var(--border-soft);
+    margin-bottom:12px;
+}
+
+/* ===================================
+   TOASTS
+=================================== */
+.toast-container{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    z-index:998;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-width:320px;
+}
+
+.toast{
+    padding:14px 20px;
+    border-radius:16px;
+    background:var(--surface-raised);
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow-soft);
+    font-size:.9rem;
+    font-weight:600;
+    animation:toastIn .3s ease;
+}
+
+.toast.success{ border-left:4px solid var(--success); }
+.toast.error{ border-left:4px solid var(--danger); }
+.toast.info{ border-left:4px solid var(--secondary); }
+
+@keyframes toastIn{
+    from{opacity:0; transform:translateX(20px);}
+    to{opacity:1; transform:translateX(0);}
+}
+
+/* ===================================
+   HEADER
+=================================== */
+
+.header{
+    width:100%;
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:color-mix(in srgb, var(--surface) 92%, black);
+    border-bottom:1px solid var(--border-soft);
+    backdrop-filter:blur(10px);
+    transform:translateY(0);
+    transition:transform .3s ease;
+}
+
+.header.header-hidden{
+    transform:translateY(-100%);
+}
+
+.header::before{
+    content:'';
+    display:block;
+    height:4px;
+    width:100%;
+    background:repeating-linear-gradient(90deg,
+        var(--primary) 0 24px,
+        var(--secondary) 24px 32px,
+        var(--accent-teal) 32px 40px,
+        transparent 40px 46px);
+}
+
+body.theme-light .header{
+    background:color-mix(in srgb, var(--surface-soft) 94%, white);
+}
+
+.header .container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:20px 0;
+    flex-wrap:wrap;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo h1{
+    font-size:1.8rem;
+    letter-spacing:.02em;
+    background:linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-weight:800;
+}
+
+.logo p{
+    color:var(--text-muted);
+    margin-top:4px;
+    font-size:.85rem;
+    font-family:var(--font-mono);
+    letter-spacing:.02em;
+}
+
+.menu ul{
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    align-items:center;
+    justify-content:center;
+}
+
+.menu a{
+    font-size:.9rem;
+    font-weight:600;
+    color:var(--text-muted);
+    transition:color .25s ease;
+    position:relative;
+}
+
+.menu a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    right:100%;
+    bottom:-6px;
+    height:2px;
+    background:var(--primary);
+    transition:right .25s ease;
+}
+
+.menu a:hover{
+    color:var(--text);
+}
+
+.menu a:hover::after{
+    right:0;
+}
+
+.header-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+}
+
+.header-buttons button{
+    padding:.85rem 1.3rem;
+    border-radius:999px;
+    background:linear-gradient(180deg, var(--surface-raised), var(--surface-light));
+    color:var(--text);
+    border:1px solid var(--border-soft);
+    font-weight:700;
+    font-size:.88rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 1px 0 rgba(0,0,0,.25);
+    transition:transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.header-buttons button:hover{
+    transform:translateY(-2px);
+    border-color:var(--accent-teal);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.3);
+}
+
+.header-buttons button:active{
+    transform:translateY(0);
+}
+
+#randomButton{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:linear-gradient(180deg, var(--surface-raised), var(--surface-light));
+}
+
+#randomButton .dice{
+    font-size:1rem;
+    transition:transform .4s cubic-bezier(.6,-0.2,.3,1.4);
+    display:inline-block;
+}
+
+#randomButton.spinning .dice{
+    transform:rotate(360deg);
+}
+
+.google-auth-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.login-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.login-btn{
+    padding:.85rem 1.2rem;
+    border-radius:999px;
+    background:linear-gradient(180deg, var(--surface-raised), var(--surface-light));
+    border:1px solid var(--border-soft);
+    color:var(--text);
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .2s ease, background .2s ease;
+}
+
+.login-btn:hover{
+    transform:translateY(-1px);
+    background:var(--surface-light);
+}
+
+#googleSignInContainer{
+    display:flex;
+    align-items:center;
+    min-height:40px;
+}
+
+.google-config-btn{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+    font-size:1rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    transition:transform .2s ease, background .2s ease;
+}
+
+.google-config-btn:hover{
+    transform:rotate(45deg);
+    background:var(--primary-soft);
+}
+
+#loginEmail,
+#loginPassword{
+    width:100%;
+    padding:16px 18px;
+    border-radius:16px;
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    color:var(--text);
+    font-family:var(--font-mono);
+    font-size:.95rem;
+    margin-top:12px;
+}
+
+/* Botão no estilo oficial "Fazer login com o Google" (pill, tema escuro),
+   exibido enquanto nenhum Client ID real está configurado. Segue as
+   proporções e cores do componente oficial do Google Identity Services. */
+.gsi-button-fallback{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    height:40px;
+    padding:0 16px 0 4px;
+    border-radius:999px;
+    background:#131314;
+    border:1px solid #8e918f;
+    color:#e3e3e3;
+    font-family:'Inter', arial, sans-serif;
+    font-size:.86rem;
+    font-weight:600;
+    letter-spacing:.01em;
+    transition:box-shadow .2s ease, background .2s ease;
+}
+
+.gsi-button-fallback:hover{
+    background:#1d1e1f;
+    box-shadow:0 1px 2px rgba(0,0,0,.35), 0 1px 3px 1px rgba(0,0,0,.3);
+}
+
+.gsi-icon-wrap{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.gsi-icon-wrap svg{
+    width:18px;
+    height:18px;
+}
+
+/* --- Modal de configuração --- */
+.config-modal-box{
+    width:min(480px,100%);
+}
+
+.config-desc{
+    color:var(--text-muted);
+    margin:14px 0 16px;
+    line-height:1.7;
+    font-size:.92rem;
+}
+
+.config-steps{
+    margin:0 0 20px 20px;
+    color:var(--text-muted);
+    font-size:.88rem;
+    line-height:1.9;
+}
+
+.config-steps a{
+    color:var(--accent-teal);
+    font-weight:600;
+}
+
+.config-steps code{
+    font-family:var(--font-mono);
+    background:var(--surface-light);
+    padding:.1rem .35rem;
+    border-radius:6px;
+}
+
+#googleClientIdInput{
+    width:100%;
+    padding:16px 18px;
+    border-radius:16px;
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    color:var(--text);
+    font-family:var(--font-mono);
+    font-size:.85rem;
+}
+
+.config-actions{
+    margin-top:18px;
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+}
+
+.config-save{
+    padding:.85rem 1.4rem;
+    border-radius:999px;
+    background:linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+    color:#fff;
+    font-weight:700;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .2s ease;
+}
+
+.config-save:hover{
+    transform:translateY(-2px);
+}
+
+.config-save:active{
+    transform:translateY(1px);
+}
+
+.profile-chip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 8px 6px 6px;
+    border-radius:999px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+}
+
+.profile-chip img{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--secondary);
+}
+
+.profile-chip span{
+    font-weight:700;
+    font-size:.9rem;
+    max-width:120px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.profile-chip button{
+    padding:.5rem 1rem;
+    border-radius:999px;
+    background:var(--surface-raised);
+    font-weight:700;
+    font-size:.82rem;
+    transition:background .2s ease;
+}
+
+.profile-chip button:hover{
+    background:var(--primary-soft);
+}
+
+/* ===================================
+   HERO
+=================================== */
+
+.hero{
+    position:relative;
+    text-align:center;
+    padding:96px 0 40px;
+    min-height:520px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    border-radius:0 0 40px 40px;
+    isolation:isolate;
+}
+
+.hero .container{
+    width:min(1180px, calc(100% - 40px));
+    margin-inline:auto;
+}
+
+/* Sem foto nem vídeo no hero — só um brilho ambiente que usa as cores do
+   próprio site, apoiado no fundo animado (canvas) que já roda atrás de
+   tudo. Isso evita qualquer imagem grande e "solta" logo na entrada. */
+.hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:radial-gradient(ellipse 70% 60% at 50% 20%, var(--primary-soft) 0%, transparent 70%);
+    pointer-events:none;
+}
+
+.hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:linear-gradient(180deg, rgba(5,5,5,0) 0%, var(--surface) 92%);
+    pointer-events:none;
+}
+
+body.theme-light .hero::after{
+    background:linear-gradient(180deg, rgba(255,255,255,0) 0%, var(--surface) 92%);
+}
+
+.hero .container{
+    position:relative;
+    z-index:1;
+}
+
+.hero h2{
+    font-size:min(4.6rem, 8.6vw);
+    line-height:.98;
+    max-width:900px;
+    margin-inline:auto;
+    color:#fdfaf5;
+    letter-spacing:-.01em;
+    text-shadow:
+        0 4px 28px rgba(0,0,0,.55),
+        0 0 44px rgba(57,217,164,.22);
+}
+
+.hero p{
+    font-size:1.05rem;
+    color:rgba(253,250,245,.85);
+    max-width:720px;
+    margin:18px auto 0;
+    line-height:1.9;
+    text-shadow:0 2px 12px rgba(0,0,0,.45);
+}
+
+.hero-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    font-weight:700;
+    letter-spacing:.12em;
+    color:var(--secondary);
+    margin-bottom:18px;
+}
+
+.hero-eyebrow::before{
+    content:'';
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 0 3px rgba(61,220,151,.25);
+    animation:blink 1.6s ease-in-out infinite;
+}
+
+@keyframes blink{
+    0%, 100%{ opacity:1; }
+    50%{ opacity:.35; }
+}
+
+.section-eyebrow{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:.76rem;
+    font-weight:700;
+    letter-spacing:.14em;
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+body.theme-light .section-eyebrow{
+    color:var(--primary-strong);
+}
+
+.scanner-frame{
+    position:relative;
+    max-width:680px;
+    margin:40px auto 0;
+    padding:22px;
+}
+
+.scanner-corner{
+    position:absolute;
+    width:26px;
+    height:26px;
+    border:3px solid var(--secondary);
+    opacity:.85;
+}
+
+.scanner-corner.tl{ top:0; left:0; border-right:none; border-bottom:none; border-radius:10px 0 0 0; }
+.scanner-corner.tr{ top:0; right:0; border-left:none; border-bottom:none; border-radius:0 10px 0 0; }
+.scanner-corner.bl{ bottom:0; left:0; border-right:none; border-top:none; border-radius:0 0 0 10px; }
+.scanner-corner.br{ bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 10px 0; }
+
+.scanner-line{
+    position:absolute;
+    left:22px;
+    right:22px;
+    height:2px;
+    top:22px;
+    background:linear-gradient(90deg, transparent, var(--success), transparent);
+    box-shadow:0 0 10px 1px rgba(61,220,151,.6);
+    animation:scanSweep 3.2s ease-in-out infinite;
+    pointer-events:none;
+}
+
+@keyframes scanSweep{
+    0%{ top:22px; opacity:0; }
+    8%{ opacity:1; }
+    50%{ top:calc(100% - 22px); opacity:1; }
+    58%{ opacity:0; }
+    100%{ top:22px; opacity:0; }
+}
+
+.scanner-frame .search-box{
+    margin-top:0;
+}
+
+.search-box{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    position:relative;
+}
+
+.search-box input{
+    width:min(600px,100%);
+    padding:18px 22px;
+    border-radius:18px;
+    background:var(--surface-raised);
+    border:1px solid var(--border-soft);
+    color:var(--text);
+    box-shadow:0 18px 50px rgba(0,0,0,.16);
+}
+
+.search-hint{
+    margin-top:10px;
+    font-size:.78rem;
+    font-family:var(--font-mono);
+    color:rgba(253,250,245,.6);
+    letter-spacing:.02em;
+}
+
+.search-hint kbd{
+    display:inline-block;
+    padding:1px 7px;
+    border-radius:6px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.25);
+    font-family:var(--font-mono);
+}
+
+.search-box button{
+    padding:18px 32px;
+    border-radius:18px;
+    background:linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+    color:#fff;
+    font-weight:700;
+    box-shadow:0 18px 40px rgba(168,31,26,.3), inset 0 1px 0 rgba(255,255,255,.25);
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.search-box button:hover{
+    transform:translateY(-2px);
+}
+
+.search-box button:active{
+    transform:translateY(1px);
+    box-shadow:0 8px 20px rgba(168,31,26,.3), inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+.autocomplete-list{
+    position:absolute;
+    top:calc(100% + 6px);
+    left:50%;
+    transform:translateX(-50%);
+    width:min(600px,100%);
+    background:var(--surface-raised);
+    border:1px solid var(--border-soft);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    z-index:50;
+    text-align:left;
+    display:none;
+}
+
+.autocomplete-list.open{
+    display:block;
+}
+
+.autocomplete-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 18px;
+    cursor:pointer;
+    transition:background .15s ease;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active{
+    background:var(--primary-soft);
+}
+
+.autocomplete-item img{
+    width:36px;
+    height:36px;
+}
+
+.autocomplete-item span.ac-id{
+    color:var(--text-muted);
+    font-size:.8rem;
+    margin-left:auto;
+    font-family:var(--font-mono);
+}
+
+/* ===================================
+   PANELS (cartão base reutilizável)
+=================================== */
+.panel{
+    background:var(--surface-soft);
+    border:1px solid var(--border-soft);
+    border-radius:32px;
+    box-shadow:var(--shadow);
+}
+
+/* ===================================
+   PROFILE
+=================================== */
+
+.profile{
+    width:100%;
+}
+
+.profile-container{
+    padding:40px;
+    display:grid;
+    grid-template-columns:minmax(200px,240px) 1fr;
+    gap:30px;
+    align-items:center;
+    background:var(--surface-soft);
+    border:1px solid var(--border-soft);
+    border-radius:32px;
+    box-shadow:var(--shadow);
+}
+
+.profile-image img{
+    width:100%;
+    border-radius:28px;
+    object-fit:cover;
+    aspect-ratio:1 / 1;
+    border:3px solid var(--surface-raised);
+}
+
+.profile-info{
+    display:grid;
+    gap:18px;
+}
+
+.profile-info h2{
+    font-size:2rem;
+}
+
+.profile-info p{
+    color:var(--text-muted);
+}
+
+.profile-info button{
+    padding:14px 26px;
+    border-radius:999px;
+    background:linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+    color:#fff;
+    font-weight:700;
+    width:max-content;
+    box-shadow:0 12px 24px rgba(168,31,26,.28), inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .2s ease;
+}
+
+.profile-info button:active{
+    transform:translateY(1px);
+}
+
+.profile-info button:hover{
+    filter:brightness(1.08);
+}
+
+/* ===================================
+   DASHBOARD
+=================================== */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(180px,1fr));
+    gap:18px;
+}
+
+.dashboard-card{
+    padding:26px;
+    border-radius:26px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow-soft);
+    text-align:center;
+    transition:transform .25s ease, box-shadow .25s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.dashboard-card::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--primary), var(--secondary), var(--accent-teal));
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .35s ease;
+}
+
+.dashboard-card:hover::after{
+    transform:scaleX(1);
+}
+
+.dashboard-icon{
+    width:28px;
+    height:28px;
+    color:var(--secondary);
+    margin:0 auto 12px;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow);
+}
+
+.dashboard-card h3{
+    margin-bottom:14px;
+    font-size:.95rem;
+    color:var(--text-muted);
+}
+
+.dashboard-card p{
+    font-size:1.8rem;
+    font-weight:800;
+    font-family:var(--font-mono);
+}
+
+/* ===================================
+   FILTERS
+=================================== */
+
+.filters .container{
+    padding:32px;
+    background:var(--surface-soft);
+    border-radius:32px;
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow);
+}
+
+.filters h2{
+    font-size:1.55rem;
+    margin-bottom:12px;
+}
+
+.filters p{
+    color:var(--text-muted);
+}
+
+.filter-container{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(200px,1fr));
+    gap:20px;
+    margin-top:24px;
+}
+
+.filter-group label{
+    display:block;
+    margin-bottom:10px;
+    font-weight:700;
+    font-size:.88rem;
+}
+
+.filter-group select{
+    width:100%;
+    padding:16px 18px;
+    border-radius:18px;
+    border:1px solid var(--border-soft);
+    background:var(--surface);
+    color:var(--text);
+    transition:border-color .2s ease;
+}
+
+.filter-group select:hover{
+    border-color:var(--border);
+}
+
+.filter-actions{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.filter-reset{
+    padding:.7rem 1.2rem;
+    border-radius:999px;
+    background:transparent;
+    border:1px solid var(--border-soft);
+    color:var(--text-muted);
+    font-weight:600;
+    font-size:.85rem;
+    transition:border-color .2s ease, color .2s ease;
+}
+
+.filter-reset:hover{
+    border-color:var(--danger);
+    color:var(--danger);
+}
+
+/* ===================================
+   GRID & CARDS
+=================================== */
+
+.pokemon-grid{
+    width:100%;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:28px;
+}
+
+.empty-state{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--text-muted);
+    font-size:1.05rem;
+}
+
+.pokemon-card{
+    position:relative;
+    padding:28px 24px 24px;
+    background:var(--surface-soft);
+    border:1px solid var(--border-soft);
+    border-radius:32px;
+    overflow:hidden;
+    box-shadow:var(--shadow-soft);
+    transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+
+.pokemon-card:hover{
+    transform:translateY(-8px) scale(1.015);
+    border-color:var(--accent-teal);
+    box-shadow:var(--shadow), 0 0 0 1px rgba(57,217,164,.35), 0 0 30px rgba(57,217,164,.18);
+}
+
+/* Folha holográfica, como o verso reflexivo de uma carta rara: some em
+   repouso, varre em diagonal e acende no hover. */
+.pokemon-card::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    background:linear-gradient(115deg,
+        transparent 20%,
+        rgba(255,92,87,.16) 34%,
+        rgba(242,176,37,.18) 42%,
+        rgba(57,217,164,.2) 50%,
+        rgba(139,123,255,.18) 58%,
+        rgba(91,163,255,.16) 66%,
+        transparent 80%);
+    background-size:260% 260%;
+    background-position:0% 0%;
+    opacity:0;
+    mix-blend-mode:color-dodge;
+    transition:opacity .4s ease;
+}
+
+body.theme-light .pokemon-card::after{
+    mix-blend-mode:overlay;
+}
+
+.pokemon-card:hover::after{
+    opacity:1;
+    animation:holoSweep 1.4s ease forwards;
+}
+
+@keyframes holoSweep{
+    from{ background-position:0% 0%; }
+    to{ background-position:100% 100%; }
+}
+
+.pokemon-card .card-id{
+    position:relative;
+    font-weight:700;
+    color:var(--text-muted);
+    font-size:.9rem;
+    margin-bottom:6px;
+    font-family:var(--font-mono);
+    letter-spacing:.02em;
+}
+
+.pokemon-card .rarity-badge{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:.72rem;
+    font-weight:800;
+    padding:.35rem .7rem;
+    border-radius:999px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    z-index:2;
+}
+
+.rarity-comum{ background:rgba(160,160,160,.2); color:#c9c9cd; }
+.rarity-incomum{ background:rgba(57,217,164,.18); color:#5fe0a8; box-shadow:0 0 12px rgba(57,217,164,.25); }
+.rarity-raro{ background:rgba(91,163,255,.2); color:#8fc0ff; box-shadow:0 0 12px rgba(91,163,255,.22); }
+.rarity-lendario{ background:rgba(242,176,37,.22); color:#ffcb4d; box-shadow:0 0 14px rgba(242,176,37,.3); }
+.rarity-mitico{ background:rgba(139,123,255,.24); color:#b3a6ff; box-shadow:0 0 14px rgba(139,123,255,.32); }
+
+body.theme-light .rarity-comum{ color:#5c5c60; }
+body.theme-light .rarity-incomum{ color:#0f8a5f; }
+body.theme-light .rarity-raro{ color:#2166cc; }
+body.theme-light .rarity-lendario{ color:#a06600; }
+body.theme-light .rarity-mitico{ color:#5943d1; }
+
+.pokemon-card img{
+    width:180px;
+    height:180px;
+    margin:0 auto 18px;
+    position:relative;
+    z-index:1;
+    object-fit:contain;
+    filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));
+}
+
+.pokemon-card h3{
+    font-size:1.4rem;
+    margin-bottom:10px;
+    text-transform:capitalize;
+}
+
+.pokemon-card p.card-flavor{
+    color:var(--text-muted);
+    margin-bottom:12px;
+    font-size:.85rem;
+    min-height:2.6em;
+}
+
+.type-badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:8px;
+}
+
+.type{
+    display:inline-flex;
+    padding:.5rem .9rem;
+    border-radius:999px;
+    font-size:.82rem;
+    font-weight:700;
+    color:#111;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.type-normal{ background:var(--t-normal); }
+.type-fire{ background:var(--t-fire); color:#fff; }
+.type-water{ background:var(--t-water); color:#fff; }
+.type-grass{ background:var(--t-grass); }
+.type-electric{ background:var(--t-electric); }
+.type-ice{ background:var(--t-ice); }
+.type-fighting{ background:var(--t-fighting); color:#fff; }
+.type-poison{ background:var(--t-poison); color:#fff; }
+.type-ground{ background:var(--t-ground); }
+.type-flying{ background:var(--t-flying); }
+.type-psychic{ background:var(--t-psychic); color:#fff; }
+.type-bug{ background:var(--t-bug); }
+.type-rock{ background:var(--t-rock); }
+.type-ghost{ background:var(--t-ghost); color:#fff; }
+.type-dragon{ background:var(--t-dragon); color:#fff; }
+.type-dark{ background:var(--t-dark); color:#fff; }
+.type-steel{ background:var(--t-steel); }
+.type-fairy{ background:var(--t-fairy); }
+
+.type.small{
+    padding:.3rem .65rem;
+    font-size:.72rem;
+}
+
+.card-buttons{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:22px;
+    position:relative;
+    z-index:1;
+}
+
+.card-buttons button{
+    padding:12px 18px;
+    border-radius:16px;
+    font-weight:700;
+    color:#fff;
+    min-width:112px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 4px 0 rgba(0,0,0,.18);
+    transition:transform .15s ease, filter .2s ease, box-shadow .15s ease;
+}
+
+.card-buttons button:active{
+    transform:translateY(3px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 1px 0 rgba(0,0,0,.18);
+}
+
+.details-btn{
+    background:linear-gradient(180deg, var(--secondary) 0%, var(--secondary-strong) 100%);
+    color:#181008;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
+}
+
+.favorite-btn{
+    background:linear-gradient(180deg, var(--danger) 0%, var(--primary-strong) 100%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+.favorite-btn.is-favorite{
+    background:linear-gradient(180deg, var(--success), #1fae76);
+    color:#06210f;
+}
+
+.card-buttons button:hover{
+    transform:scale(1.05);
+}
+
+.skeleton-block{
+    background:linear-gradient(90deg, var(--border-soft) 25%, var(--border) 37%, var(--border-soft) 63%);
+    background-size:400% 100%;
+    animation:skeletonShine 1.4s ease infinite;
+    border-radius:12px;
+}
+
+@keyframes skeletonShine{
+    0%{ background-position:100% 50%; }
+    100%{ background-position:0 50%; }
+}
+
+/* ===================================
+   PAGINATION
+=================================== */
+
+.pagination{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.pagination button{
+    min-width:44px;
+    padding:12px 16px;
+    border-radius:14px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+    font-weight:700;
+    transition:background .2s ease, transform .2s ease;
+}
+
+.pagination button:hover:not(:disabled){
+    transform:translateY(-2px);
+}
+
+.pagination button.active{
+    background:linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+    color:#fff;
+    border-color:transparent;
+    box-shadow:0 8px 20px rgba(168,31,26,.35);
+}
+
+.pagination button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.pagination .dots{
+    display:flex;
+    align-items:center;
+    padding:0 6px;
+    color:var(--text-muted);
+}
+
+/* ===================================
+   COMPARADOR
+=================================== */
+
+.compare-section .container{
+    padding:42px;
+    background:var(--surface-soft);
+    border-radius:32px;
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow);
+}
+
+.compare-section h2{
+    font-size:1.75rem;
+    text-align:center;
+}
+
+.compare-section p{
+    color:var(--text-muted);
+    text-align:center;
+    margin-top:10px;
+    margin-bottom:34px;
+}
+
+.compare-container{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(220px,1fr));
+    gap:20px;
+    align-items:end;
+}
+
+.compare-box input{
+    width:100%;
+    padding:18px 20px;
+    border-radius:18px;
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    color:var(--text);
+}
+
+#compareButton{
+    width:100%;
+    padding:18px 24px;
+    border-radius:18px;
+    background:linear-gradient(180deg, var(--secondary) 0%, var(--secondary-strong) 100%);
+    color:#181008;
+    font-weight:700;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
+    transition:transform .2s ease;
+}
+
+#compareButton:active{
+    transform:translateY(1px);
+}
+
+#compareButton:hover{
+    transform:translateY(-2px);
+}
+
+.compare-result{
+    margin-top:34px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:22px;
+}
+
+.compare-card{
+    padding:26px;
+    background:var(--surface-light);
+    border-radius:28px;
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow-soft);
+}
+
+.compare-card img{
+    width:120px;
+    margin:0 auto 12px;
+}
+
+.compare-card h3{
+    margin-bottom:16px;
+    text-align:center;
+    text-transform:capitalize;
+}
+
+.compare-card ul li{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--border-soft);
+    color:var(--text-muted);
+}
+
+.compare-card ul li:last-child{
+    border-bottom:none;
+}
+
+.compare-card ul li.winner{
+    color:var(--success);
+    font-weight:800;
+}
+
+.compare-verdict{
+    grid-column:1/-1;
+    text-align:center;
+    padding:16px;
+    border-radius:20px;
+    background:var(--primary-soft);
+    font-weight:700;
+    color:var(--text);
+}
+
+.compare-error{
+    text-align:center;
+    padding:18px;
+    border-radius:20px;
+    background:rgba(255,77,77,.12);
+    color:var(--text);
+    grid-column:1/-1;
+}
+
+/* ===================================
+   FAVORITOS & RANKING
+=================================== */
+
+.favorites-section,
+.ranking-section{
+    width:100%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.section-title h2{
+    font-size:1.8rem;
+}
+
+.section-title p{
+    color:var(--text-muted);
+    margin-top:8px;
+}
+
+.favorites-grid,
+.ranking-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:26px;
+}
+
+.empty-state#favoritesEmpty{
+    display:none;
+    grid-column:1/-1;
+}
+
+.ranking-card{
+    padding:32px;
+    border-radius:32px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow);
+    text-align:center;
+    transition:transform .3s ease;
+}
+
+.ranking-card:hover{
+    transform:translateY(-8px);
+}
+
+.ranking-card img{
+    width:80px;
+    margin:0 auto 14px;
+}
+
+.ranking-card h3{
+    margin-bottom:18px;
+    color:var(--primary);
+}
+
+.ranking-card p{
+    font-size:1.45rem;
+    font-weight:700;
+    text-transform:capitalize;
+}
+
+.ranking-card .rank-value{
+    color:var(--secondary);
+    font-size:1rem;
+    font-weight:600;
+    font-family:var(--font-mono);
+    display:block;
+    margin-top:6px;
+}
+
+/* ===================================
+   MODAL
+=================================== */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:900;
+    background:rgba(5,4,3,.65);
+    backdrop-filter:blur(3px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-overlay[hidden]{
+    display:none;
+}
+
+.modal-box{
+    position:relative;
+    width:min(640px,100%);
+    max-height:88vh;
+    overflow-y:auto;
+    background:var(--surface-raised);
+    border-radius:32px;
+    border:1px solid var(--border-soft);
+    box-shadow:var(--shadow);
+    padding:40px;
+}
+
+.modal-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--surface-light);
+    font-size:1.4rem;
+    line-height:1;
+    color:var(--text);
+}
+
+.modal-close:hover{
+    background:var(--primary-soft);
+}
+
+.modal-header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.modal-header img{
+    width:180px;
+    margin:0 auto 12px;
+}
+
+.modal-header h3{
+    font-size:1.8rem;
+    text-transform:capitalize;
+}
+
+.modal-header .card-id{
+    color:var(--text-muted);
+    font-weight:700;
+    font-family:var(--font-mono);
+}
+
+.modal-section{
+    margin-top:24px;
+}
+
+.modal-section h4{
+    margin-bottom:12px;
+    font-size:1rem;
+    color:var(--secondary);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+}
+
+.stat-row{
+    display:grid;
+    grid-template-columns:110px 1fr 46px;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+    font-size:.9rem;
+}
+
+.stat-bar{
+    height:10px;
+    border-radius:999px;
+    background:var(--surface-light);
+    overflow:hidden;
+}
+
+.stat-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius:999px;
+    transition:width .6s ease;
+}
+
+.modal-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    color:var(--text-muted);
+    font-size:.9rem;
+}
+
+.modal-abilities{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.ability-chip{
+    padding:.4rem .8rem;
+    border-radius:999px;
+    background:var(--surface-light);
+    font-size:.82rem;
+    text-transform:capitalize;
+}
+
+.modal-favorite{
+    margin-top:26px;
+    width:100%;
+    padding:16px;
+    border-radius:18px;
+    background:linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+    color:#fff;
+    font-weight:700;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .2s ease;
+}
+
+.modal-favorite:active{
+    transform:translateY(1px);
+}
+
+.modal-favorite.is-favorite{
+    background:linear-gradient(180deg, var(--success), #1fae76);
+    color:#06210f;
+}
+
+/* --- Radar de atributos (SVG) --- */
+.stat-radar-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:8px;
+}
+
+.stat-radar-wrap svg{
+    max-width:220px;
+    width:100%;
+}
+
+.stat-radar-fill{
+    fill:var(--primary-soft);
+    stroke:var(--primary);
+    stroke-width:2;
+}
+
+.stat-radar-grid{
+    fill:none;
+    stroke:var(--border-soft);
+    stroke-width:1;
+}
+
+.stat-radar-label{
+    font-family:var(--font-mono);
+    font-size:9px;
+    fill:var(--text-muted);
+}
+
+/* --- Efetividade de tipo --- */
+.effectiveness-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+    gap:10px;
+}
+
+.effectiveness-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:.5rem .7rem;
+    border-radius:14px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+}
+
+.effectiveness-item .mult{
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:.78rem;
+}
+
+.mult-weak{ color:var(--danger); }
+.mult-resist{ color:var(--success); }
+.mult-immune{ color:var(--text-muted); }
+
+/* --- Cadeia de evolução --- */
+.evolution-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.evolution-node{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    padding:10px;
+    border-radius:18px;
+    background:var(--surface-light);
+    border:1px solid var(--border-soft);
+    cursor:pointer;
+    transition:transform .2s ease, border-color .2s ease;
+    min-width:84px;
+}
+
+.evolution-node:hover{
+    transform:translateY(-3px);
+    border-color:var(--secondary);
+}
+
+.evolution-node.current{
+    border-color:var(--primary);
+    background:var(--primary-soft);
+}
+
+.evolution-node img{
+    width:56px;
+    height:56px;
+}
+
+.evolution-node span{
+    font-size:.78rem;
+    font-weight:700;
+    text-transform:capitalize;
+}
+
+.evolution-arrow{
+    color:var(--text-muted);
+    font-size:1.2rem;
+}
+
+.evolution-loading,
+.evolution-empty{
+    text-align:center;
+    color:var(--text-muted);
+    font-size:.85rem;
+}
+
+/* ===================================
+   FOOTER
+=================================== */
+
+footer{
+    margin-top:80px;
+    padding:56px 0 32px;
+    background:color-mix(in srgb, var(--surface) 96%, black);
+}
+
+body.theme-light footer{
+    background:var(--surface-soft);
+}
+
+footer .container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:30px;
+    align-items:start;
+}
+
+footer h2,
+footer h3{
+    color:var(--text);
+}
+
+footer p,
+footer a{
+    color:var(--text-muted);
+    line-height:1.8;
+}
+
+footer a:hover{
+    color:var(--primary);
+}
+
+.footer-copy{
+    grid-column:1/-1;
+    text-align:center;
+    margin-top:24px;
+    border-top:1px solid var(--border-soft);
+    padding-top:24px;
+}
+
+.footer-api-credit a{
+    color:var(--secondary);
+    font-weight:600;
+}
+
+/* ===================================
+   ANIMAÇÕES & DETALHES
+=================================== */
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.hero,
+.profile,
+.filters,
+.pokemon-grid,
+.compare-section,
+.favorites-section,
+.ranking-section,
+footer{
+    animation:fadeIn .8s ease;
+}
+
+@media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+        animation-duration:0.001ms !important;
+        transition-duration:0.001ms !important;
+    }
+}
+
+::selection{
+    background:var(--primary);
+    color:#fff;
+}
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:var(--surface);
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--primary-strong);
+}
+
+/* ===================================
+   RESPONSIVIDADE
+=================================== */
+
+@media(max-width:1120px){
+    .header .container{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .menu ul{
+        justify-content:center;
+    }
+}
+
+@media(max-width:980px){
+    .profile-container{
+        grid-template-columns:1fr;
+        text-align:center;
+        justify-items:center;
+    }
+    .profile-image img{
+        width:200px;
+    }
+    .compare-container{
+        grid-template-columns:1fr;
+    }
+    .filter-container{
+        grid-template-columns:1fr 1fr;
+    }
+    .dashboard{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:720px){
+    .hero{
+        padding-top:64px;
+    }
+    .hero h2{
+        font-size:2.6rem;
+    }
+    .filter-container{
+        grid-template-columns:1fr;
+    }
+
+    /* O cabeçalho continua fixo no topo (position:sticky já cuida disso),
+       mas compacto: nada de empilhar logo + subtítulo + menu + botões em
+       várias linhas — isso é o que fazia ele tomar metade da tela. */
+    .header .container{
+        padding:12px 0;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        gap:10px;
+    }
+
+    .logo p{
+        display:none;
+    }
+
+    .menu{
+        order:3;
+        width:100%;
+    }
+
+    .menu ul{
+        flex-wrap:nowrap;
+        justify-content:flex-start;
+        gap:20px;
+        overflow-x:auto;
+        padding-bottom:4px;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:none;
+    }
+
+    .menu ul::-webkit-scrollbar{
+        display:none;
+    }
+
+    .header-buttons{
+        width:auto;
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        justify-content:flex-start;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:none;
+    }
+
+    .header-buttons::-webkit-scrollbar{
+        display:none;
+    }
+
+    .header-buttons button{
+        flex-shrink:0;
+        white-space:nowrap;
+    }
+}
+
+@media(max-width:560px){
+    .menu ul{
+        gap:16px;
+    }
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+    .pokemon-card{
+        padding:24px;
+    }
+    .modal-box{
+        padding:24px;
+    }
+}
